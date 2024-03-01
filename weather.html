@@ -1,0 +1,46 @@
+<html lang="en">
+    <head>
+        <title>hw6</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+   
+    </head>
+    <body>
+        <h1>Welcome to the Weather App</h1>
+    </body>
+
+<script>
+$(document).ready(function() {
+
+$.getJSON("https://api.open-meteo.com/v1/forecast",
+{   latitude: 52.52,
+    longitude: 13.41,
+    current: "temperature_2m,wind_speed_10m",
+     hourly: "temperature_2m,relative_humidity_2m,wind_speed_10m"
+})
+.done(function(data){
+    let currentWeather = data.current;
+    let hourlyWeather = data.hourly;
+    let info = '<h2> Current Weather Information </h2>';
+    info+= "<p> Time: " + currentWeather.time + "</p>";
+    info+= "<p> Temperature: "+ currentWeather.temperature_2m + "</p>";
+    info+= "<p> Wind Speed: " + currentWeather.wind_speed_10m + "</p>";
+    info+= '<h2> Hourly Weather Update</h2>'
+    for(let i = 0; i < hourlyWeather.time.length; i++){ 
+        info+= "<p> Time: " + hourlyWeather.time[i] + "</p>";
+        info+= "<p> Temperature: "+ hourlyWeather.temperature_2m[i] + "</p>";
+        info+= "<p> Relative Humidity: " + hourlyWeather.relative_humidity_2m[i] + "</p>";
+        info+= "<p> Wind Speed: " + hourlyWeather.wind_speed_10m[i] + "</p>";
+    }
+    //append new elements
+    $('body').append(info);
+})
+
+    .fail(function(error) {
+        console.error("Error fetching weather data:", error);
+    });
+   
+});
+</script>
+</html>
